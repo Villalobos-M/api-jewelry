@@ -10,8 +10,8 @@ import filterObj from "../utils/filterObj.js";
 import User from "../models/user.model.js";
 
 //catchAsync
-import catchAsync from "../utils/catchAsync";
-import AppError from "../utils/appError";
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError.js";
 
 // Get all users
 const getAllUsers = catchAsync(async (req, res, next) => {
@@ -118,8 +118,7 @@ const deleteUser = catchAsync(async (req, res) => {
    });
 
    if (!user) {
-      // return next(new AppError(404, "Cant delete user, invalid ID"));
-      res.send("404, Cant delete user, invalid ID");
+      return next(new AppError(404, "Cant delete user, invalid ID"));
    }
 
    // Soft delete

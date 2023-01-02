@@ -1,5 +1,8 @@
 import Order from "../models/order.model.js";
 
+//error
+import AppError from "../utils/appError.js";
+
 // Post order
 const createOrder = async (req, res, next) => {
    const { totalPrice, userId, cartId } = req.body;
@@ -22,18 +25,40 @@ const createOrder = async (req, res, next) => {
 
 // Get all orders
 const getAllOrders = async (req, res, next) => {
-   try {
-      const order = await Order.findAll({});
+   const orders = await Order.findAll({
+      where: {
+         userId: req.currentUser.id,
+         status: "active",
+      },
+   });
 
-      res.status(200).json({
-         status: "success",
-         data: {
-            order,
-         },
-      });
-   } catch (error) {
-      console.log(error);
+   res.status(200).json({
+      status: "success",
+      data: {
+         orders,
+      },
+   });
+};
+// Get all orders
+const getOrderById = async (req, res, next) => {
+   const { id } = req.params;
+   const order = await Order.findOne({
+      where: {
+         id,
+         status: "active",
+      },
+   });
+
+   if (!order) {
+      return next(new AppError(404, "Cant found order, invalid ID"));
    }
+
+   res.status(200).json({
+      status: "success",
+      data: {
+         order,
+      },
+   });
 };
 
-export { createOrder, getAllOrders };
+export { createOrder, getAllOrders, getOrderById };

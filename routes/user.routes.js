@@ -10,6 +10,8 @@ import {
    deleteUser,
 } from "../controllers/user.controller.js";
 
+import { getAllOrders, getOrderById } from "../controllers/order.controller.js";
+
 //middlewares
 import { validateSession } from "../middlewares/auth.middleware.js";
 
@@ -19,7 +21,7 @@ router.get("/", validateSession, getAllUsers);
 router.patch("/:id", validateSession, updateUser);
 router.delete("/:id", validateSession, deleteUser);
 
-router.get("/orders", validateSession, getAllUsers);
-router.get("/orders/:id", validateSession, getAllUsers);
+router.get("/orders", validateSession, getAllOrders);
+router.get("/orders/:id", validateSession, getOrderById);
 
 export default router;
